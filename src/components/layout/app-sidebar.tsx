@@ -7,6 +7,7 @@ import { IconArrowRight } from '@tabler/icons-react';
 
 const AppSidebar = () => {
   const [opened, { open, close }] = useDisclosure(false);
+
   return (
     <>
       <Drawer
