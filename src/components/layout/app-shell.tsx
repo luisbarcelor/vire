@@ -3,7 +3,7 @@
 import React from 'react';
 import { AppShell as MantineAppShell, Burger, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconDashboard, IconLogin } from '@tabler/icons-react';
+import { IconDashboard, IconHome2, IconLogin } from '@tabler/icons-react';
 import Link from 'next/link';
 
 const AppShell = ({ children }: Readonly<{ children: React.ReactNode }>) => {
@@ -28,6 +28,12 @@ const AppShell = ({ children }: Readonly<{ children: React.ReactNode }>) => {
         <NavLink
           component={Link}
           href="/"
+          label="Home"
+          leftSection={<IconHome2 size={16} stroke={1.5} />}
+        />
+        <NavLink
+          component={Link}
+          href="/dashboard"
           label="Dashboard"
           leftSection={<IconDashboard size={16} stroke={1.5} />}
         />

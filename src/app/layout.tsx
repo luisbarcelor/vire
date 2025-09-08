@@ -4,11 +4,10 @@ import React from 'react';
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { theme } from '@/theme';
-import AppShell from '@/components/layout/app-shell';
 
 export const metadata: Metadata = {
   title: 'Vire',
-  description: '',
+  description: 'A beginner-friendly personal finance app',
 };
 
 export default function RootLayout({
@@ -20,9 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <MantineProvider theme={theme} defaultColorScheme="dark">
-          <AppShell>
-            <main>{children}</main>
-          </AppShell>
+          {children}
         </MantineProvider>
       </body>
     </html>

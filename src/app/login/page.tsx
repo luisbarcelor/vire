@@ -20,23 +20,23 @@ const LoginPage = () => {
     <Flex
       justify="center"
       align="center"
-      className="bg-[var(--colors-uranian-blue)] h-screen m-0"
+      className="h-screen m-0"
     >
       <Flex
         justify="center"
         direction="column"
         gap="md"
-        className="bg-[var(--colors-cream)] p-6 w-xl"
+        className="bg-[#3a3a3a] rounded-md p-6 w-xl"
       >
-        <Title order={1} className="text-center text-[var(--colors-gunmetal)]">
+        <Title order={1} className="text-center">
           Login
         </Title>
 
         <form className="flex flex-col gap-4">
           <TextInput
-            styles={{
-              label: { color: 'var(--colors-gunmetal)' }
-            }}
+            // styles={{
+            //   label: { color: 'var(--colors-gunmetal)' }
+            // }}
             label="Email"
             placeholder="Email address"
             leftSection={<IconMail size={16} />}
@@ -44,9 +44,9 @@ const LoginPage = () => {
             required
           />
           <TextInput
-            styles={{
-              label: { color: 'var(--colors-gunmetal)' }
-            }}
+            // styles={{
+            //   label: { color: 'var(--colors-gunmetal)' }
+            // }}
             label="Password"
             placeholder="Password"
             leftSection={<IconLock size={16} />}
