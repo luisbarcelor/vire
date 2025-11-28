@@ -1,0 +1,84 @@
+﻿# Visual Studio / Rider
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build directories
+bin/
+obj/
+out/
+
+# Rider caches
+.idea/
+*.sln.iml
+
+# NuGet packages
+*.nupkg
+packages/
+# NuGet v3 cache
+~/.nuget/packages/
+
+# Build results
+*.dll
+*.exe
+*.app
+*.log
+*.pdb
+*.cache
+
+# Visual Studio temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# ASP.NET temporary files
+*.vspscc
+*.vssscc
+*.dbmdl
+*.suo
+*.user
+*.userosscache
+
+# Publish directory
+publish/
+publish_html/
+wwwroot/
+
+# Rider specific
+.idea/
+*.ipr
+*.iws
+*.iml
+
+# JetBrains Rider caches
+.idea/
+*.sln.iml
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Others
+TestResults/
+*.coverlet.*
+coverage.*
+.vscode/
+.env
+.env.*
+node_modules/
+dist/
+*.log
+*.seed
+*.bak
+*.backup
+*.orig
+*.rej
+*.swp
+*.lock
+*.db
+*.sqlite
+*.sqlite3
