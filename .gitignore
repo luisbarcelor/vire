@@ -1,0 +1,71 @@
+﻿# =========================
+# Visual Studio / .NET
+# =========================
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+bin/
+obj/
+out/
+publish/
+wwwroot/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+TestResults/
+*.coverlet.*
+coverage.*
+
+# NuGet
+*.nupkg
+packages/
+~/.nuget/packages/
+
+# Rider / JetBrains
+.idea/
+*.ipr
+*.iws
+*.iml
+*.sln.iml
+
+# =========================
+# Node / Next.js
+# =========================
+node_modules/
+.next/
+out/
+dist/
+.cache/
+.parcel-cache/
+lib-cov/
+coverage/
+.nyc_output/
+.rpt2_cache/
+.rts2_cache_*/
+.yarn/*
+.pnp.*
+.env
+.env*.local
+.next-env.d.ts
+.vercel
+
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+*.pem
+
+# =========================
+# Optional / Generated
+# =========================
+src/generated/prisma/
