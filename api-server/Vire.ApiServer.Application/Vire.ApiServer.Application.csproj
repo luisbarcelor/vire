@@ -6,4 +6,7 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Vire.ApiServer.Domain\Vire.ApiServer.Domain.csproj" />
+    </ItemGroup>
 </Project>

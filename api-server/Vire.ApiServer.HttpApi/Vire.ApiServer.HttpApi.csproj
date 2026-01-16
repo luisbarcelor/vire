@@ -7,12 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.12.8" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Vire.ApiServer.Application\Vire.ApiServer.Application.csproj" />
       <ProjectReference Include="..\Vire.ApiServer.Persistence\Vire.ApiServer.Persistence.csproj" />
     </ItemGroup>
 
