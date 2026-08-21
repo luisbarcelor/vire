@@ -1,27 +1,16 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import React from 'react';
-import { MantineProvider } from '@mantine/core';
-import '@mantine/core/styles.css';
-import { theme } from '@/theme';
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'Vire',
-  description: 'A beginner-friendly personal finance app',
+  title: "Vire",
+  description:
+    "Herramienta de información para invertir, localizada para España.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
-      <body>
-        <MantineProvider theme={theme} defaultColorScheme="dark">
-          {children}
-        </MantineProvider>
-      </body>
+    <html lang="es">
+      <body>{children}</body>
     </html>
   );
 }
