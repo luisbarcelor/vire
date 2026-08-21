@@ -20,7 +20,7 @@ analytics. Those are later phases, not warm-up tasks.
 ## Design docs
 
 Design is complete for V1 and lives in [`docs/`](./docs). Start with
-[`docs/README.md`](./docs/README.md) for the reading order — the project brief
+[`docs/index.md`](./docs/index.md) for the reading order — the project brief
 comes first and everything else assumes it.
 
 ## Stack
