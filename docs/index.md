@@ -3,6 +3,9 @@
 Design and scoping documents for a Spain-localized investing information tool.
 Solo, part-time project. No code in this folder — these describe what gets built.
 
+These documents refer to the product as the "Investing Info Tool". The repository
+and product name is **Vire**; they describe the same product.
+
 ## Reading order
 
 1. **[project-brief-investing-tool-V1.md](./project-brief-investing-tool-V1.md)** —
@@ -17,14 +20,14 @@ Solo, part-time project. No code in this folder — these describe what gets bui
 5. **[design-stack-V1.md](./design-stack-V1.md)** — Next.js, localStorage, and the
    list of decisions deliberately left open until the point of use.
 6. **[spanish-market-research.md](./spanish-market-research.md)** — background research.
-   Reference material, not a decision record; the brief records where V1 diverges from it.
+   Reference material, not a decision record; the brief records where V1 diverges from
+   it. A point-in-time snapshot — its own Caveats section notes the vintage of each
+   headline datapoint.
 
-## Status
+## Build order
 
-Design is complete for V1. No application code exists yet.
-
-Next: `create-next-app`, hardcoded watchlist items, composition view, then real glossary
-content. Manual entry, persistence and styling come after the view works.
+Hardcoded watchlist items, then the composition view, then real glossary content.
+Manual entry, persistence and styling come after the view works.
 
 ## Scope reminder
 

@@ -46,6 +46,9 @@ tools already known well, and avoid building infrastructure before core value is
 - **How the "descriptive, not prescriptive" rule is enforced at the display level, not
   just in the computation** — answered by [design-ui-guardrails-V1.md](./design-ui-guardrails-V1.md): a fixed list of
   prohibited and required presentation patterns, applying to every screen.
+- **TypeScript vs. plain JavaScript, Tailwind vs. CSS modules, App Router
+  configuration** — resolved the way this doc predicted, by Next.js's own
+  project-creation prompts: TypeScript, Tailwind CSS, App Router, sources under `src/`.
 
 ## Explicitly deferred — to be decided at the point of use, not now
 
@@ -54,8 +57,6 @@ these resolve faster and more accurately once there's a real, concrete task in f
 you (e.g. a framework's own setup prompts, or the first real attempt at a task) than by
 deciding them abstractly ahead of time.
 
-- TypeScript vs. plain JavaScript, Tailwind vs. CSS modules, App Router configuration —
-  these are answered directly by Next.js's own project-creation prompts.
 - MDX / frontmatter processing library specifics — to be resolved when the first
   glossary content file is actually loaded and rendered.
 - Styling approach / design system — to be resolved once unstyled UI is actually felt
