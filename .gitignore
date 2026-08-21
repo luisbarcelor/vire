@@ -42,3 +42,6 @@ next-env.d.ts
 
 # editors
 .idea/
+
+# claude code — machine-specific launch paths
+.claude/launch.json
