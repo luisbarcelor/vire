@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { type FormEvent, useEffect, useState } from "react";
 import {
   ASSET_CLASSES,
@@ -231,6 +232,9 @@ export default function Home() {
   return (
     <main>
       <h1>Vire</h1>
+      <p>
+        <Link href="/composition">Ver composición de la cartera</Link>
+      </p>
 
       <form onSubmit={handleSubmit}>
         <HoldingFields form={form} onChange={setForm} />

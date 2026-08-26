@@ -10,7 +10,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        {children}
+        <footer>
+          <p>
+            Esta aplicación ofrece información educativa, no asesoramiento de
+            inversión.
+          </p>
+        </footer>
+      </body>
     </html>
   );
 }
