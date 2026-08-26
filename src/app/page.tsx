@@ -1,37 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { type FormEvent, useEffect, useState } from "react";
 import {
-  ASSET_CLASSES,
-  type AssetClass,
+  EMPTY_HOLDING_FORM,
+  HoldingDialog,
+  type HoldingFormState,
+} from "@/components/HoldingDialog";
+import { PencilIcon, PlusIcon, TrashIcon } from "@/components/icons";
+import {
   loadWatchlist,
   parseWeight,
-  REGIONS,
-  type Region,
-  SECTORS,
-  type Sector,
   saveWatchlist,
   type WatchlistItem,
 } from "@/lib/watchlist";
-
-type HoldingFormState = {
-  identifier: string;
-  notes: string;
-  weight: string;
-  region: Region;
-  sector: Sector;
-  assetClass: AssetClass;
-};
-
-const emptyForm: HoldingFormState = {
-  identifier: "",
-  notes: "",
-  weight: "",
-  region: REGIONS[0],
-  sector: SECTORS[0],
-  assetClass: ASSET_CLASSES[0],
-};
 
 function formStateFromItem(item: WatchlistItem): HoldingFormState {
   return {
@@ -44,233 +25,215 @@ function formStateFromItem(item: WatchlistItem): HoldingFormState {
   };
 }
 
-function HoldingFields({
-  form,
-  onChange,
+function Tag({
+  children,
+  variant,
 }: {
-  form: HoldingFormState;
-  onChange: (next: HoldingFormState) => void;
+  children: React.ReactNode;
+  variant: "accent" | "neutral" | "outline";
 }) {
+  const variantClass = {
+    accent: "bg-accent-800 text-accent-100",
+    neutral: "bg-neutral-800 text-neutral-100",
+    outline: "border border-accent text-accent",
+  }[variant];
   return (
-    <>
-      <label>
-        Identifier
-        <input
-          required
-          value={form.identifier}
-          onChange={(event) =>
-            onChange({ ...form, identifier: event.target.value })
-          }
-        />
-      </label>
-
-      <label>
-        Notes
-        <input
-          value={form.notes}
-          onChange={(event) => onChange({ ...form, notes: event.target.value })}
-        />
-      </label>
-
-      <label>
-        Weight (%)
-        <input
-          type="number"
-          value={form.weight}
-          onChange={(event) =>
-            onChange({ ...form, weight: event.target.value })
-          }
-        />
-      </label>
-
-      <label>
-        Region
-        <select
-          required
-          value={form.region}
-          onChange={(event) =>
-            onChange({ ...form, region: event.target.value as Region })
-          }
-        >
-          {REGIONS.map((region) => (
-            <option key={region} value={region}>
-              {region}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label>
-        Sector
-        <select
-          required
-          value={form.sector}
-          onChange={(event) =>
-            onChange({ ...form, sector: event.target.value as Sector })
-          }
-        >
-          {SECTORS.map((sector) => (
-            <option key={sector} value={sector}>
-              {sector}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label>
-        Asset class
-        <select
-          required
-          value={form.assetClass}
-          onChange={(event) =>
-            onChange({
-              ...form,
-              assetClass: event.target.value as AssetClass,
-            })
-          }
-        >
-          {ASSET_CLASSES.map((assetClass) => (
-            <option key={assetClass} value={assetClass}>
-              {assetClass}
-            </option>
-          ))}
-        </select>
-      </label>
-    </>
+    <span
+      className={`inline-flex items-center rounded-[6px] px-2.5 py-[3px] text-[11px] tracking-[0.02em] ${variantClass}`}
+    >
+      {children}
+    </span>
   );
 }
 
 export default function Home() {
   const [items, setItems] = useState<WatchlistItem[]>([]);
-  const [form, setForm] = useState(emptyForm);
-  const [formError, setFormError] = useState<string | null>(null);
-
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState(emptyForm);
-  const [editError, setEditError] = useState<string | null>(null);
+  const [dialog, setDialog] = useState<
+    { mode: "add" } | { mode: "edit"; id: string } | null
+  >(null);
+  const [form, setForm] = useState(EMPTY_HOLDING_FORM);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setItems(loadWatchlist());
   }, []);
 
+  function openAdd() {
+    setForm(EMPTY_HOLDING_FORM);
+    setError(null);
+    setDialog({ mode: "add" });
+  }
+
+  function openEdit(item: WatchlistItem) {
+    setForm(formStateFromItem(item));
+    setError(null);
+    setDialog({ mode: "edit", id: item.id });
+  }
+
+  function closeDialog() {
+    setDialog(null);
+    setError(null);
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!dialog) return;
 
     const weightResult = parseWeight(form.weight);
     if (!weightResult.ok) {
-      setFormError(weightResult.error);
+      setError(weightResult.error);
       return;
     }
 
-    const newItem: WatchlistItem = {
-      id: crypto.randomUUID(),
-      identifier: form.identifier,
-      notes: form.notes,
-      weight: weightResult.value,
-      region: form.region,
-      sector: form.sector,
-      assetClass: form.assetClass,
-    };
+    const next =
+      dialog.mode === "add"
+        ? [
+            ...items,
+            {
+              id: crypto.randomUUID(),
+              identifier: form.identifier,
+              notes: form.notes,
+              weight: weightResult.value,
+              region: form.region,
+              sector: form.sector,
+              assetClass: form.assetClass,
+            },
+          ]
+        : items.map((item) =>
+            item.id === dialog.id
+              ? {
+                  ...item,
+                  identifier: form.identifier,
+                  notes: form.notes,
+                  weight: weightResult.value,
+                  region: form.region,
+                  sector: form.sector,
+                  assetClass: form.assetClass,
+                }
+              : item,
+          );
 
-    const next = [...items, newItem];
     setItems(next);
     saveWatchlist(next);
-    setForm(emptyForm);
-    setFormError(null);
-  }
-
-  function handleEditStart(item: WatchlistItem) {
-    setEditingId(item.id);
-    setEditForm(formStateFromItem(item));
-    setEditError(null);
-  }
-
-  function handleEditCancel() {
-    setEditingId(null);
-    setEditError(null);
-  }
-
-  function handleEditSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (editingId === null) return;
-
-    const weightResult = parseWeight(editForm.weight);
-    if (!weightResult.ok) {
-      setEditError(weightResult.error);
-      return;
-    }
-
-    const next = items.map((item) =>
-      item.id === editingId
-        ? {
-            ...item,
-            identifier: editForm.identifier,
-            notes: editForm.notes,
-            weight: weightResult.value,
-            region: editForm.region,
-            sector: editForm.sector,
-            assetClass: editForm.assetClass,
-          }
-        : item,
-    );
-    setItems(next);
-    saveWatchlist(next);
-    setEditingId(null);
-    setEditError(null);
+    closeDialog();
   }
 
   function handleDelete(id: string) {
     const next = items.filter((item) => item.id !== id);
     setItems(next);
     saveWatchlist(next);
-    if (editingId === id) {
-      setEditingId(null);
-      setEditError(null);
-    }
+    if (dialog?.mode === "edit" && dialog.id === id) closeDialog();
   }
 
+  const sorted = [...items].sort((a, b) => (b.weight ?? -1) - (a.weight ?? -1));
+  const weighted = items.filter((item) => item.weight !== null);
+  const weightSum = weighted.reduce((sum, item) => sum + (item.weight ?? 0), 0);
+
   return (
-    <main>
-      <h1>Vire</h1>
-      <p>
-        <Link href="/composition">Ver composición de la cartera</Link>
-      </p>
+    <div>
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="m-0 mb-1 font-medium text-[32px] tracking-[-0.015em]">
+            Watchlist
+          </h1>
+          <p className="m-0 text-[13px] text-neutral-500">
+            {items.length === 0
+              ? "Ninguna posición seguida todavía."
+              : `${items.length} posiciones seguidas · pesos suman ${weightSum.toLocaleString(
+                  "es-ES",
+                  { maximumFractionDigits: 1 },
+                )}%`}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={openAdd}
+          className="inline-flex items-center gap-1.5 rounded-md border border-accent px-3.5 py-2 font-medium text-[14px] text-accent hover:bg-[color-mix(in_srgb,var(--color-accent)_12%,transparent)]"
+        >
+          <PlusIcon className="size-4" />
+          Añadir posición
+        </button>
+      </div>
 
-      <form onSubmit={handleSubmit}>
-        <HoldingFields form={form} onChange={setForm} />
-        {formError ? <p role="alert">{formError}</p> : null}
-        <button type="submit">Add</button>
-      </form>
+      {items.length > 0 ? (
+        <p className="mb-6 text-[12px] text-neutral-500">
+          Orden: peso descendente
+        </p>
+      ) : null}
 
-      <ul>
-        {items.map((item) =>
-          editingId === item.id ? (
-            <li key={item.id}>
-              <form onSubmit={handleEditSubmit}>
-                <HoldingFields form={editForm} onChange={setEditForm} />
-                {editError ? <p role="alert">{editError}</p> : null}
-                <button type="submit">Save</button>
-                <button type="button" onClick={handleEditCancel}>
-                  Cancel
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
+        {sorted.map((item) => (
+          <div
+            key={item.id}
+            className="flex flex-col gap-3 rounded-md bg-surface p-3 shadow-sm"
+          >
+            <div className="flex items-start gap-3">
+              <span className="grid size-[38px] flex-none place-items-center rounded-sm bg-neutral-900 text-[11px] text-neutral-500 tracking-[0.04em] shadow-[inset_0_0_0_1px_var(--color-neutral-800)]">
+                {item.identifier.slice(0, 2).toUpperCase()}
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="font-medium text-[17px] leading-[1.2]">
+                  {item.identifier}
+                </div>
+                {item.notes ? (
+                  <div className="text-[12px] text-neutral-500 leading-[1.35]">
+                    {item.notes}
+                  </div>
+                ) : null}
+              </div>
+              <div className="flex-none text-right">
+                <div className="font-medium text-[19px] leading-[1.1]">
+                  {item.weight === null ? "—" : `${item.weight}%`}
+                </div>
+                <div className="text-[11px] text-neutral-500">
+                  {item.weight === null ? "Solo seguimiento" : ""}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 border-divider border-t pt-3">
+              <Tag variant="accent">{item.region}</Tag>
+              <Tag variant="neutral">{item.sector}</Tag>
+              <Tag variant="outline">{item.assetClass}</Tag>
+              <div className="ml-auto flex gap-1">
+                <button
+                  type="button"
+                  aria-label="Editar"
+                  onClick={() => openEdit(item)}
+                  className="grid size-7 place-items-center rounded-md text-neutral-500 hover:bg-[color-mix(in_srgb,var(--color-ink)_7%,transparent)] hover:text-ink"
+                >
+                  <PencilIcon className="size-4" />
                 </button>
-              </form>
-            </li>
-          ) : (
-            <li key={item.id}>
-              {item.identifier} — {item.region} / {item.sector} /{" "}
-              {item.assetClass}
-              {item.weight !== null ? ` — ${item.weight}%` : " — watching only"}
-              {item.notes ? ` — ${item.notes}` : null}
-              <button type="button" onClick={() => handleEditStart(item)}>
-                Edit
-              </button>
-              <button type="button" onClick={() => handleDelete(item.id)}>
-                Delete
-              </button>
-            </li>
-          ),
-        )}
-      </ul>
-    </main>
+                <button
+                  type="button"
+                  aria-label="Eliminar"
+                  onClick={() => handleDelete(item.id)}
+                  className="grid size-7 place-items-center rounded-md text-neutral-500 hover:bg-[color-mix(in_srgb,var(--color-ink)_7%,transparent)] hover:text-ink"
+                >
+                  <TrashIcon className="size-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {dialog ? (
+        <HoldingDialog
+          title={dialog.mode === "add" ? "Añadir posición" : "Editar posición"}
+          form={form}
+          onChange={setForm}
+          error={error}
+          onCancel={closeDialog}
+          onSubmit={handleSubmit}
+          onDelete={
+            dialog.mode === "edit" ? () => handleDelete(dialog.id) : undefined
+          }
+          submitLabel={
+            dialog.mode === "add" ? "Guardar posición" : "Guardar cambios"
+          }
+        />
+      ) : null}
+    </div>
   );
 }

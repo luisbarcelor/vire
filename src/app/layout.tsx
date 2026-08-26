@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { AppShell } from "@/components/AppShell";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "Vire",
@@ -9,15 +16,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es">
+    <html lang="es" className={inter.variable}>
       <body>
-        {children}
-        <footer>
-          <p>
-            Esta aplicación ofrece información educativa, no asesoramiento de
-            inversión.
-          </p>
-        </footer>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

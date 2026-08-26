@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Donut } from "@/components/Donut";
 import {
   type CompositionBreakdown,
   computeComposition,
@@ -15,31 +15,6 @@ const BREAKDOWN_TITLES: Record<CompositionBreakdown["key"], string> = {
   assetClass: "Clase de activo",
 };
 
-function Breakdown({ breakdown }: { breakdown: CompositionBreakdown }) {
-  return (
-    <section>
-      <h2>{BREAKDOWN_TITLES[breakdown.key]}</h2>
-      <ul>
-        {breakdown.rows.map((row) => (
-          <li key={row.label}>
-            <span>{row.label}</span>
-            <span>{row.share.toFixed(1)}%</span>
-            <div style={{ background: "#e5e5e5", height: 8, width: "100%" }}>
-              <div
-                style={{
-                  background: "#888",
-                  height: 8,
-                  width: `${row.share}%`,
-                }}
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
-
 export default function Composition() {
   const [composition, setComposition] = useState<PortfolioComposition | null>(
     null,
@@ -50,29 +25,45 @@ export default function Composition() {
   }, []);
 
   return (
-    <main>
-      <h1>Composición de la cartera</h1>
-      <p>
-        <Link href="/">Volver al watchlist</Link>
-      </p>
+    <div>
+      <div className="mb-8">
+        <h1 className="m-0 mb-1 font-medium text-[32px] tracking-[-0.015em]">
+          Composición
+        </h1>
+        <p className="m-0 text-[13px] text-neutral-500">
+          Agregado de las etiquetas de la watchlist. Descriptivo, no es una
+          recomendación.
+        </p>
+      </div>
 
       {composition === null ? null : composition.kind === "empty" ? (
-        <p>Todavía no hay elementos con peso registrado.</p>
+        <p className="text-[14px] text-neutral-500">
+          Todavía no hay elementos con peso registrado.
+        </p>
       ) : (
         <>
-          {composition.breakdowns.map((breakdown) => (
-            <Breakdown key={breakdown.key} breakdown={breakdown} />
-          ))}
-          <p>
-            Basado en {composition.includedCount} de {composition.totalCount}{" "}
-            elementos seguidos.
-          </p>
-          <p>
-            Calculado a partir de las etiquetas que has introducido, no de
-            posiciones verificadas.
-          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {composition.breakdowns.map((breakdown) => (
+              <Donut
+                key={breakdown.key}
+                title={BREAKDOWN_TITLES[breakdown.key]}
+                rows={breakdown.rows}
+              />
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col gap-2 border-divider border-t pt-6 text-[13px] text-neutral-500 leading-[1.5]">
+            <p className="m-0">
+              Basado en {composition.includedCount} de {composition.totalCount}{" "}
+              elementos seguidos.
+            </p>
+            <p className="m-0">
+              Calculado a partir de las etiquetas que has introducido, no de
+              posiciones verificadas.
+            </p>
+          </div>
         </>
       )}
-    </main>
+    </div>
   );
 }
